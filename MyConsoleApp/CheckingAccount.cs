@@ -1,20 +1,33 @@
 ﻿namespace MyConsoleApp;
 
-public class CheckingAccount : BankAccount
+public sealed class CheckingAccount : BankAccount
 {
-    public CheckingAccount(string ownerName, decimal transactionFee) : base(ownerName)
+    private const decimal OverdraftLimit = 500000;
+    public CheckingAccount(string ownerName, decimal monthlyFee) : base(ownerName)
     {
-        TransactionFee = transactionFee;
+        MonthlyFee = monthlyFee;
     }
 
-    public decimal TransactionFee { get; set; } = 5000;
+    public decimal MonthlyFee { get; set; }
+
+    public override void CalculateMonthlyInterest()
+    {
+        if (Balance >= MonthlyFee)
+        {
+            Balance -= MonthlyFee;
+        }
+        else
+        {
+            Console.WriteLine("Your balance don't enought to deductible monthly fees.");
+        }
+    }
 
     public override bool Withdraw(decimal amount)
     {
         Console.WriteLine($"Your withdraw request are {amount}.");
-        if (amount > 0 && Balance >= amount + TransactionFee)
+        if (amount > 0 && Balance + OverdraftLimit >= amount)
         {
-            Balance -= amount + TransactionFee;
+            Balance -= amount;
             Console.WriteLine($"You have been withdraw {amount}, now your balance are {Balance}.");
             return true;
         }
@@ -27,6 +40,6 @@ public class CheckingAccount : BankAccount
 
     public override void DisplayInfo()
     {
-        Console.WriteLine($"So TK: {AccountNumber} | Chu TK: {OwnerName} | Loai: Checkings | Phi GD: {TransactionFee:#,##0} VND | So du: {Balance:#,##0} VND");
+        Console.WriteLine($"So TK: {AccountNumber} | Chu TK: {OwnerName} | Loai: Checkings | Phi GD: {MonthlyFee:#,##0} VND | So du: {Balance:#,##0} VND");
     }
 }

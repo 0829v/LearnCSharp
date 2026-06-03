@@ -2,19 +2,19 @@
 
 public class SavingsAccount : BankAccount
 {
-    public SavingsAccount(string ownerName, decimal interestRate) : base(ownerName)
+    public SavingsAccount(string ownerName, decimal annualInterestRate) : base(ownerName)
     {
-        InterestRate = interestRate;
+        AnnualInterestRate = annualInterestRate;
     }
-    public decimal InterestRate { get; set; }
+    public decimal AnnualInterestRate { get; set; }
 
-    public void ApplyInterest()
+    public override void CalculateMonthlyInterest()
     {
-        Balance += Balance * InterestRate / 100;
+        Balance += Balance * (AnnualInterestRate / 100) / 12;
     }
 
-    public override void DisplayInfo()
+    public sealed override void DisplayInfo()
     {
-        Console.WriteLine($"So TK: {AccountNumber} | Chu TK: {OwnerName} | Loai: Savings | Lai suat: {InterestRate}% | So du: {Balance:#,##0} VND");
+        Console.WriteLine($"So TK: {AccountNumber} | Chu TK: {OwnerName} | Loai: Savings | Lai suat: {AnnualInterestRate}% | So du: {Balance:#,##0} VND");
     }
 }

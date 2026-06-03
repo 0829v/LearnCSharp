@@ -1,6 +1,6 @@
 ﻿namespace MyConsoleApp;
 
-public class BankAccount
+public abstract class BankAccount
 {
     private static int _counter = 0;
     private string _ownerName = string.Empty;
@@ -26,7 +26,7 @@ public class BankAccount
     }
     public decimal Balance { get; protected set; } = 0;
 
-    public virtual void Deposit(decimal amount)
+    public void Deposit(decimal amount)
     {
         if (amount > 0)
         {
@@ -54,6 +54,8 @@ public class BankAccount
             return false;
         }
     }
+
+    public abstract void CalculateMonthlyInterest();
 
     public virtual void DisplayInfo()
     {
