@@ -3,11 +3,16 @@
 public class BankAccount
 {
     private static int _counter = 0;
+    private string _ownerName = string.Empty;
+    public BankAccount(string ownerName)
+    {
+        _counter++;
+        AccountNumber = "ACC" + _counter.ToString().PadLeft(6, '0');
+        OwnerName = ownerName;
+        Balance = 0;
+    }
 
-    private string _accountNumber;
-    public string AccountNumber { get => _accountNumber; }
-
-    private string _ownerName;
+    public string AccountNumber { get; init; }
     public string OwnerName
     {
         get => _ownerName;
@@ -19,26 +24,14 @@ public class BankAccount
             }
         }
     }
+    public decimal Balance { get; protected set; } = 0;
 
-    private decimal _balance = 0;
-    public decimal Balance { get => _balance; }
-
-    public BankAccount(string ownerName)
+    public virtual void Deposit(decimal amount)
     {
-        _counter += 1;
-        string newAccountNumber = "ACC" + _counter.ToString().PadLeft(6, '0');
-        _accountNumber = newAccountNumber;
-        _ownerName = ownerName;
-        _balance = 0;
-    }
-
-    public void Deposit(decimal amount)
-    {
-        Console.WriteLine($"Your deposit request are {amount}.");
         if (amount > 0)
         {
-            _balance += amount;
-            Console.WriteLine($"You have been deposit {amount}, now your balance are {_balance}.");
+            Balance += amount;
+            Console.WriteLine($"You have been deposit {amount}, now your balance are {Balance}.");
         }
         else
         {
@@ -46,13 +39,13 @@ public class BankAccount
         }
     }
 
-    public bool Withdraw(decimal amount)
+    public virtual bool Withdraw(decimal amount)
     {
         Console.WriteLine($"Your withdraw request are {amount}.");
-        if (amount > 0 && _balance >= amount)
+        if (amount > 0 && Balance >= amount)
         {
-            _balance -= amount;
-            Console.WriteLine($"You have been withdraw {amount}, now your balance are {_balance}.");
+            Balance -= amount;
+            Console.WriteLine($"You have been withdraw {amount}, now your balance are {Balance}.");
             return true;
         }
         else
@@ -62,8 +55,8 @@ public class BankAccount
         }
     }
 
-    public void DisplayInfo()
+    public virtual void DisplayInfo()
     {
-        Console.WriteLine($"Your information: \nAccount number: {_accountNumber} \nOwner name: {_ownerName} \nBalance: {_balance}");
+        Console.WriteLine($"So TK: {AccountNumber} | Chu TK: {OwnerName} | So du: {Balance:#,##0} VND");
     }
 }
